@@ -28,6 +28,7 @@ function Navbar() {
           {/* Desktop Menu (Hidden on Small Screens) */}
           <div className="hidden sm:flex space-x-2 lg:space-x-4 font-medium text-lg items-center">
             {/* NavLink for 'JSP' is the Logo, so we start with the next link */}
+            <NavLink to="/projects" className={getNavLinkClass}>Projects</NavLink>
             <NavLink to="/courses" className={getNavLinkClass}>Courses</NavLink>
             <NavLink to="/centers" className={getNavLinkClass}>Centers</NavLink>
             <NavLink to="/joinus" className={getNavLinkClass}>Career</NavLink>
@@ -55,6 +56,17 @@ function Navbar() {
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
             {/* The base class for mobile links is different to fill the width */}
+            <NavLink 
+              to="/projects" 
+              onClick={toggleMenu} 
+              className={({ isActive }) => 
+                `${isActive ? "bg-violet-600 text-white" : "text-gray-300"} 
+                block px-3 py-2 rounded-md text-base font-medium text-right
+                hover:bg-violet-700 hover:text-white transition duration-300`
+              }
+            >
+              Projects
+            </NavLink>
             <NavLink 
               to="/courses" 
               onClick={toggleMenu} 

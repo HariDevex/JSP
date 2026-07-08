@@ -14,6 +14,7 @@ import { usePageScroll } from './components/three/usePageScroll';
 
 const SceneWrapper = lazy(() => import('./components/three/SceneWrapper'));
 const ParticlesUpgraded = lazy(() => import('./components/three/upgraded/ParticlesUpgraded'));
+const Projects = lazy(() => import('./pages/Projects.jsx'));
 
 function App() {
   const scrollRef = usePageScroll();
@@ -32,6 +33,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/projects' element={<Projects />} />
           <Route path='/courses' element={<Courses />} /> 
           <Route path='/centers' element={<Centers />} />
           <Route path='/joinus' element={<JoinUs/>} />
