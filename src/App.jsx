@@ -1,33 +1,46 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom';
 import './App.css'
-import Header from '../src/componenents/Header.jsx';
-import Navbar from '../src/componenents/Navbar.jsx';
-import Home from '../src/pages/Home.jsx';
-import Centers from '../src/pages/Centers.jsx';
-import Courses from '../src/pages/Courses.jsx';
-import Contact from '../src/pages/Contact.jsx'; 
-import About from '../src/pages/About.jsx';
-import Footer from '../src/componenents/Footer.jsx';
+import Header from './components/Header.jsx';
+import Navbar from './components/Navbar.jsx';
+import Home from './pages/Home.jsx';
+import Centers from './pages/Centers.jsx';
+import Courses from './pages/Courses.jsx';
+import Contact from './pages/Contact.jsx'; 
+import About from './pages/About.jsx';
+import Footer from './components/Footer.jsx';
 import JoinUs from './pages/JoinUs.jsx';
+import { usePageScroll } from './components/three/usePageScroll';
+
+const SceneWrapper = lazy(() => import('./components/three/SceneWrapper'));
+const ParticlesUpgraded = lazy(() => import('./components/three/upgraded/ParticlesUpgraded'));
+
 function App() {
-  
+  const scrollRef = usePageScroll();
 
   return (
-    <>
-       <Header />
-      <Navbar />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/courses' element={<Courses />} /> 
-        <Route path='/centers' element={<Centers />} />
-        <Route path='/joinus' element={<JoinUs/>} />
-        <Route path='/contact' element={<Contact />} />
-        <Route path='/about' element={<About />} />
-      </Routes>
-      <Footer />
-    </>
-  
+    <div className="relative">
+      <Suspense fallback={null}>
+        <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+          <SceneWrapper scrollRef={scrollRef}>
+            <ParticlesUpgraded />
+          </SceneWrapper>
+        </div>
+      </Suspense>
+      <div className="relative z-10">
+        <Header />
+        <Navbar />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/courses' element={<Courses />} /> 
+          <Route path='/centers' element={<Centers />} />
+          <Route path='/joinus' element={<JoinUs/>} />
+          <Route path='/contact' element={<Contact />} />
+          <Route path='/about' element={<About />} />
+        </Routes>
+        <Footer />
+      </div>
+    </div>
   )
 }
 

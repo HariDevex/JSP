@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 // ⚠️ Ensure you have installed and imported framer-motion!
+/* eslint-disable-next-line no-unused-vars */
 import { motion } from 'framer-motion'; 
 
 const Contact = () => {

@@ -1,6 +1,11 @@
 /* eslint-disable no-unused-vars */
-import React, { useRef } from 'react';
+import React, { useRef, lazy, Suspense } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { usePageScroll } from '../components/three/usePageScroll';
+
+const HeroBranded = lazy(() => import('../components/three/upgraded/HeroBranded'));
+const TechGlobeUpgraded = lazy(() => import('../components/three/upgraded/TechGlobeUpgraded'));
+const SceneWrapper = lazy(() => import('../components/three/SceneWrapper'));
 
 // Icons
 import Html from '../assets/icons/Html.png';
@@ -137,7 +142,8 @@ const serviceCardVariants = {
 // --- Home Component ---
 
 const Home = () => {
- 
+  const scrollRef = usePageScroll();
+  
   const heroRef = useRef(null);
   const isInViewHero = useInView(heroRef, { once: true, amount: 0.5 });
 
@@ -152,18 +158,25 @@ const Home = () => {
 
   return (
     <div className="flex flex-col items-center min-h-screen px-4 py-10 md:py-16 text-gray-900 bg-gray-50 overflow-hidden">
-      {/* Hero Title */}
-      <motion.h1
-        ref={heroRef}
-        variants={heroVariants}
-        initial="hidden"
-        animate={isInViewHero ? 'visible' : 'hidden'}
-        whileHover={{ scale: 1.03, color: '#047867' }} 
-        transition={{ type: 'spring', stiffness: 200, damping: 10 }}
-        className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-center mb-12 md:mb-20 text-gray-900 cursor-pointer max-w-4xl leading-tight tracking-wider"
-      >
-        From Concept to Clicks: <span className="text-teal-600">Building Websites That Win Hearts</span> 🚀
-      </motion.h1>
+      {/* Hero Title with 3D Branded Background */}
+      <div className="relative w-full flex flex-col items-center mb-12 md:mb-20" style={{ minHeight: '350px' }}>
+        <Suspense fallback={null}>
+          <SceneWrapper scrollRef={scrollRef}>
+            <HeroBranded />
+          </SceneWrapper>
+        </Suspense>
+        <motion.h1
+          ref={heroRef}
+          variants={heroVariants}
+          initial="hidden"
+          animate={isInViewHero ? 'visible' : 'hidden'}
+          whileHover={{ scale: 1.03, color: '#047867' }} 
+          transition={{ type: 'spring', stiffness: 200, damping: 10 }}
+          className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-center text-gray-900 cursor-pointer max-w-4xl leading-tight tracking-wider relative z-10"
+        >
+          From Concept to Clicks: <span className="text-teal-600">Building Websites That Win Hearts</span> 🚀
+        </motion.h1>
+      </div>
 
       {/* --- Vision & Mission --- */}
       <motion.div
@@ -217,8 +230,15 @@ const Home = () => {
         variants={visionMissionVariants}
         initial="hidden"
         animate={isInViewTech ? 'visible' : 'hidden'}
-        className="relative w-full max-w-6xl bg-gradient-to-br from-indigo-700 to-purple-900 rounded-3xl shadow-2xl p-8 md:p-12 mb-24 overflow-hidden transform skew-y-1 md:skew-y-0" // More dramatic background, shadow, and transformation
+        className="relative w-full max-w-6xl bg-gradient-to-br from-indigo-700 to-purple-900 rounded-3xl shadow-2xl p-8 md:p-12 mb-24 overflow-hidden transform skew-y-1 md:skew-y-0"
       >
+        <Suspense fallback={null}>
+          <div className="absolute inset-0 pointer-events-none opacity-40">
+            <SceneWrapper scrollRef={scrollRef}>
+              <TechGlobeUpgraded />
+            </SceneWrapper>
+          </div>
+        </Suspense>
         <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8 text-white relative z-10 uppercase tracking-wider">
           🛠️ Core Expertise
         </h2>

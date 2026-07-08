@@ -25,7 +25,14 @@ const CourseCard = ({ course }) => {
         <h4 className="text-2xl font-bold tracking-wide text-white">{course.title}</h4>
       </div>
 
-      <p className="mt-4 text-sm leading-relaxed text-white/80">{course.points}</p>
+      <ul className="mt-4 space-y-2">
+        {course.points.map((point, i) => (
+          <li key={i} className="text-sm leading-relaxed text-white/80 flex items-start gap-2">
+            <span className="text-teal-400 mt-0.5">•</span>
+            {point}
+          </li>
+        ))}
+      </ul>
     </motion.div>
   );
 };
