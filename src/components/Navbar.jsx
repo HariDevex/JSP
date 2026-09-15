@@ -1,90 +1,129 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { FaBars, FaTimes } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 
+const navLinks = [
+  { to: '/', label: 'Home' },
+  { to: '/projects', label: 'Projects' },
+  { to: '/courses', label: 'Courses' },
+  { to: '/centers', label: 'Centers' },
+  { to: '/joinus', label: 'Career' },
+  { to: '/about', label: 'About' },
+];
 
 function Navbar() {
-  const [isOpen, setIsOpen] = useState(false); // State to track if the mobile menu is open
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  // Base Tailwind classes for all NavLinks
-  const navLinkClasses = "px-3 py-2 rounded-lg transition duration-300 ease-in-out hover:bg-violet-700 hover:text-white";
-
-  // Function to determine active/inactive styles
-  const getNavLinkClass = ({ isActive }) =>
-    `${navLinkClasses} ${isActive ? "bg-violet-600 text-white border-b-2 border-green-300" : "text-violet-800"}`;
-
-  const toggleMenu = () => setIsOpen(!isOpen);
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <nav className="bg-gray-100 shadow-xl border-b-4 border-indigo-500 sticky top-0 z-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          
-          {/* Logo/Brand (Always Visible) */}
-          <NavLink to="/" className="flex-shrink-0" onClick={() => setIsOpen(false)}>
-            <div className='text-3xl text-red-700 font-extrabold italic border-r-4 border-red-700 pr-2'>JSP</div>
-          </NavLink>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-white/80 backdrop-blur-xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] border-b border-border-subtle'
+          : 'bg-white'
+      }`}
+    >
+      <div className="max-w-[75rem] mx-auto px-4 lg:px-8">
+        <div className="flex items-center justify-between h-14">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2.5 shrink-0" onClick={() => setIsOpen(false)}>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-surface-tint flex items-center justify-center shadow-sm">
+              <span className="text-white font-display font-extrabold text-sm">J</span>
+            </div>
+            <div className="hidden sm:flex flex-col leading-none">
+              <span className="font-display font-bold text-on-surface text-sm tracking-tight">Jambhavan</span>
+              <span className="text-[10px] text-outline font-label tracking-widest uppercase">Software Systems</span>
+            </div>
+          </Link>
 
-          {/* Desktop Menu (Hidden on Small Screens) */}
-          <div className="hidden sm:flex space-x-2 lg:space-x-4 font-medium text-lg items-center">
-            {/* NavLink for 'JSP' is the Logo, so we start with the next link */}
-            <NavLink to="/projects" className={getNavLinkClass}>Projects</NavLink>
-            <NavLink to="/courses" className={getNavLinkClass}>Courses</NavLink>
-            <NavLink to="/centers" className={getNavLinkClass}>Centers</NavLink>
-            <NavLink to="/joinus" className={getNavLinkClass}>Career</NavLink>
-            <NavLink to="/contact" className={getNavLinkClass}>Contact</NavLink>
-            <NavLink to='/about' className={getNavLinkClass}>About</NavLink>
+          {/* Desktop Menu */}
+          <div className="hidden lg:flex items-center gap-0.5">
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                className={({ isActive }) =>
+                  `relative px-3.5 py-2 text-sm font-medium transition-colors duration-200 ${
+                    isActive
+                      ? 'text-primary'
+                      : 'text-on-surface-variant hover:text-on-surface'
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    {link.label}
+                    {isActive && (
+                      <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-primary rounded-full" />
+                    )}
+                  </>
+                )}
+              </NavLink>
+            ))}
           </div>
 
-          {/* Hamburger Button (Visible ONLY on Small Screens) */}
-          <div className="sm:hidden flex items-center">
-            <button 
-              onClick={toggleMenu} 
-              className="inline-flex items-center justify-center p-2 rounded-md text-violet-800 hover:text-white hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white transition duration-200"
+          {/* CTA + Hamburger */}
+          <div className="flex items-center gap-2">
+            <Link
+              to="/contact"
+              className="hidden lg:inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-primary text-on-primary text-sm font-semibold hover:bg-primary-container transition-colors shadow-sm"
             >
-              <span className="sr-only">Open main menu</span>
-              {isOpen ? <FaTimes className="h-6 w-6" /> : <FaBars className="h-6 w-6" />}
+              <span>Contact Us</span>
+              <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </Link>
+
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="lg:hidden p-2 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors"
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            >
+              <span className="material-symbols-outlined text-[22px]">
+                {isOpen ? 'close' : 'menu'}
+              </span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown (Conditionally Rendered and positioned) */}
-      {isOpen && (
-        <div 
-          className="sm:hidden absolute right-0 w-1/2 bg-gray-800 z-10 shadow-2xl pb-2 transition-transform duration-300 ease-in-out"
-        >
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            {/* The base class for mobile links is different to fill the width */}
-            <NavLink 
-              to="/projects" 
-              onClick={toggleMenu} 
-              className={({ isActive }) => 
-                `${isActive ? "bg-violet-600 text-white" : "text-gray-300"} 
-                block px-3 py-2 rounded-md text-base font-medium text-right
-                hover:bg-violet-700 hover:text-white transition duration-300`
+      {/* Mobile Menu */}
+      <div
+        className={`lg:hidden transition-all duration-300 ease-in-out ${
+          isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+        } overflow-hidden`}
+      >
+        <div className="px-4 pb-4 pt-2 space-y-1 bg-white border-t border-border-subtle">
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              onClick={() => setIsOpen(false)}
+              className={({ isActive }) =>
+                `flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                  isActive
+                    ? 'bg-primary/8 text-primary'
+                    : 'text-on-surface-variant hover:bg-surface-container-low'
+                }`
               }
             >
-              Projects
+              <span>{link.label}</span>
+              <span className="material-symbols-outlined text-[18px]">chevron_right</span>
             </NavLink>
-            <NavLink 
-              to="/courses" 
-              onClick={toggleMenu} 
-              className={({ isActive }) => 
-                `${isActive ? "bg-violet-600 text-white" : "text-gray-300"} 
-                block px-3 py-2 rounded-md text-base font-medium text-right
-                hover:bg-violet-700 hover:text-white transition duration-300`
-              }
-            >
-              Courses
-            </NavLink>
-            <NavLink to="/centers" onClick={toggleMenu} className={({ isActive }) => `${isActive ? "bg-violet-600 text-white" : "text-gray-300"} block px-3 py-2 rounded-md text-base font-medium text-right hover:bg-violet-700 hover:text-white transition duration-300`}>Centers</NavLink>
-            <NavLink to="/joinus" onClick={toggleMenu} className={({ isActive }) => `${isActive ? "bg-violet-600 text-white" : "text-gray-300"} block px-3 py-2 rounded-md text-base font-medium text-right hover:bg-violet-700 hover:text-white transition duration-300`}>Careers</NavLink>
-            <NavLink to="/contact" onClick={toggleMenu} className={({ isActive }) => `${isActive ? "bg-violet-600 text-white" : "text-gray-300"} block px-3 py-2 rounded-md text-base font-medium text-right hover:bg-violet-700 hover:text-white transition duration-300`}>Contact</NavLink>
-            <NavLink to='/about' onClick={toggleMenu} className={({ isActive }) => `${isActive ? "bg-violet-600 text-white" : "text-gray-300"} block px-3 py-2 rounded-md text-base font-medium text-right hover:bg-violet-700 hover:text-white transition duration-300`}>About</NavLink>
-          </div>
+          ))}
+          <Link
+            to="/contact"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-primary text-on-primary text-sm font-semibold mt-2"
+          >
+            <span>Contact Us</span>
+            <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+          </Link>
         </div>
-      )}
+      </div>
     </nav>
   );
 }

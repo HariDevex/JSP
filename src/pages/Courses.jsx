@@ -3,80 +3,95 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { courses } from '../constants';
 
-const CourseCard = ({ course }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      whileHover={{ scale: 1.05 }}
-      className={`w-full lg:w-[400px] p-6 rounded-2xl bg-gradient-to-br ${course.theme} 
-        shadow-lg border border-white/10 hover:border-white/30 
-        transition-all duration-300 relative overflow-hidden 
-        hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]`}
-    >
-      {/* Optional glowing border layer */}
-      <div className="absolute inset-0 border border-white/10 rounded-2xl pointer-events-none" />
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+};
 
-      <div className="flex items-center gap-4">
-        <div className="w-20 h-20 bg-white/5 rounded-xl flex justify-center items-center border border-white/20">
-          <img src={course.icon} alt={course.title} className="w-12 h-12 object-contain" />
-        </div>
-        <h4 className="text-2xl font-bold tracking-wide text-white">{course.title}</h4>
-      </div>
-
-      <ul className="mt-4 space-y-2">
-        {course.points.map((point, i) => (
-          <li key={i} className="text-sm leading-relaxed text-white/80 flex items-start gap-2">
-            <span className="text-teal-400 mt-0.5">•</span>
-            {point}
-          </li>
-        ))}
-      </ul>
-    </motion.div>
-  );
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
 };
 
 const Courses = () => {
   return (
-    <motion.section
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-      className="max-container"
-    >
-      {/* Header Section */}
-      <div className="bg-gradient-to-br from-[#3f87a6] to-[#ebf8e1] dark:from-gray-900 dark:to-gray-700 text-white py-12 text-center shadow-lg">
-        <div className="max-w-6xl mx-auto px-4">
+    <div className="flex flex-col items-center">
+      {/* Hero */}
+      <section className="relative w-full overflow-hidden pt-24 pb-16 lg:pt-32 lg:pb-20 bg-surface-container-low">
+        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[42rem] h-[22rem] bg-primary/10 rounded-full blur-3xl pointer-events-none -z-10" />
+        <div className="max-w-[75rem] mx-auto px-4 lg:px-8 text-center">
+          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-surface-container shadow-sm mb-6">
+              <span className="material-symbols-outlined text-primary text-[16px]">school</span>
+              <span className="text-label-badge font-medium text-primary uppercase tracking-widest">Training Programs</span>
+            </div>
+          </motion.div>
           <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-5xl font-extrabold uppercase tracking-wide text-white drop-shadow"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="font-display font-extrabold text-4xl sm:text-5xl lg:text-[64px] leading-tight tracking-tight text-on-surface"
+            style={{ letterSpacing: '-0.03em' }}
           >
-            Courses <span className="text-teal-400 animate-pulse" >Offered</span>
+            Courses <span className="text-gradient-primary">Offered</span>
           </motion.h1>
           <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-4 text-lg italic text-white/90"
+            className="text-body-lg text-on-surface-variant max-w-2xl mx-auto mt-6"
           >
-            Our Software Development training is designed to bridge the gap between academic knowledge and industry expectations.
-            Whether you're a beginner or looking to sharpen your skills, this program offers a structured pathway to become a confident developer.
+            Our software development training bridges the gap between academic knowledge and industry
+            expectations. A structured pathway to become a confident developer.
           </motion.p>
         </div>
-      </div>
+      </section>
 
-      {/* Cards Section */}
-      <div className="flex flex-wrap justify-center gap-8 my-12 px-4">
-        {courses.map((course) => (
-          <CourseCard key={course.title} course={course} />
-        ))}
-      </div>
-
-      <hr className="border-slate-300 mx-8" />
-    </motion.section>
+      {/* Course Cards */}
+      <section className="w-full py-16 lg:py-20 bg-surface">
+        <div className="max-w-[75rem] mx-auto px-4 lg:px-8">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.05 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+          >
+            {courses.map((course, index) => (
+              <motion.div
+                key={course.title}
+                variants={fadeUp}
+                whileHover={{ y: -4 }}
+                className="bg-surface-card rounded-xl p-6 shadow-card border border-border-subtle flex flex-col hover:shadow-card-hover transition-all group"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-14 h-14 rounded-xl bg-surface-container flex items-center justify-center border border-border-subtle shrink-0">
+                    <img src={course.icon} alt={course.title} className="w-8 h-8 object-contain" />
+                  </div>
+                  <div>
+                    <h3 className="font-display font-semibold text-title-sm text-on-surface leading-tight">{course.title}</h3>
+                  </div>
+                </div>
+                <ul className="space-y-2 flex-1">
+                  {course.points.map((point, i) => (
+                    <li key={i} className="flex items-start gap-2 text-body-sm text-on-surface-variant">
+                      <span className="material-symbols-outlined text-primary text-[16px] mt-0.5 shrink-0">check_circle</span>
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="pt-4 mt-4 border-t border-border-subtle flex items-center justify-between">
+                  <span className="text-label-badge text-outline uppercase tracking-wider font-medium">
+                    Course {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <span className="material-symbols-outlined text-[18px] text-primary group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+    </div>
   );
 };
 

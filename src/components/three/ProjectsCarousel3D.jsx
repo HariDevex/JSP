@@ -101,7 +101,7 @@ function CarouselCard({ project, index, activeIndex, totalCount, onClick, radius
   const x = Math.sin(angle) * radius;
   const z = Math.cos(angle) * radius;
 
-  useFrame((state, delta) => {
+  useFrame((state) => {
     if (!cardRef.current) return;
     
     // Float cards slightly based on index to create organic look
@@ -267,7 +267,7 @@ export default function ProjectsCarousel3D({ projects, activeIndex, setActiveInd
   const radius = 3.6; // radius of the circle
 
   // Smoothly rotate the entire carousel to make the active index front and center
-  useFrame((state, delta) => {
+  useFrame(() => {
     if (!groupRef.current) return;
     
     // Target rotation is negative since we rotate the carousel opposite to activeIndex direction
