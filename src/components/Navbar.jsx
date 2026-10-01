@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
+import ThemeToggle from './ThemeToggle';
 
 const navLinks = [
   { to: '/', label: 'Home' },
@@ -24,8 +25,8 @@ function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/80 backdrop-blur-xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] border-b border-border-subtle'
-          : 'bg-white'
+          ? 'bg-surface/80 backdrop-blur-xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] border-b border-border-subtle'
+          : 'bg-surface'
       }`}
     >
       <div className="max-w-[75rem] mx-auto px-4 lg:px-8">
@@ -69,6 +70,7 @@ function Navbar() {
 
           {/* CTA + Hamburger */}
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <Link
               to="/contact"
               className="hidden lg:inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-primary text-on-primary text-sm font-semibold hover:bg-primary-container transition-colors shadow-sm"
@@ -96,7 +98,7 @@ function Navbar() {
           isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
         } overflow-hidden`}
       >
-        <div className="px-4 pb-4 pt-2 space-y-1 bg-white border-t border-border-subtle">
+        <div className="px-4 pb-4 pt-2 space-y-1 bg-surface border-t border-border-subtle">
           {navLinks.map((link) => (
             <NavLink
               key={link.to}
