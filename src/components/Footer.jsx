@@ -9,9 +9,11 @@ const Footer = () => {
           {/* Brand */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-on-primary font-display font-bold text-sm">J</span>
-              </div>
+              <img
+                src="/logo.png"
+                alt="Jambhavan Software Systems"
+                className="w-8 h-8 rounded-lg object-contain"
+              />
               <span className="font-display font-bold text-on-surface text-base">
                 Jambhavan Software Systems
               </span>

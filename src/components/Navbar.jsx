@@ -33,9 +33,11 @@ function Navbar() {
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 shrink-0" onClick={() => setIsOpen(false)}>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-surface-tint flex items-center justify-center shadow-sm">
-              <span className="text-white font-display font-extrabold text-sm">J</span>
-            </div>
+            <img
+              src="/logo.png"
+              alt="Jambhavan Software Systems"
+              className="w-9 h-9 rounded-xl object-contain"
+            />
             <div className="hidden sm:flex flex-col leading-none">
               <span className="font-display font-bold text-on-surface text-sm tracking-tight">Jambhavan</span>
               <span className="text-[10px] text-outline font-label tracking-widest uppercase">Software Systems</span>
